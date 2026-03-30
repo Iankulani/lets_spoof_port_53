@@ -1,0 +1,66 @@
+# mkdocs.yml
+site_name: LETS-SPOOF-PORT-53
+site_description: Ultimate Multi-Platform Cybersecurity Command & Control Center
+site_author: Ian Carter Kulani
+repo_url: https://gitlab.com/your-repo/lets-spoof-port-53
+repo_name: lets-spoof-port-53
+
+theme:
+  name: material
+  palette:
+    primary: cyan
+    accent: purple
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+
+nav:
+  - Home: index.md
+  - Installation: 
+    - Linux: installation/linux.md
+    - Windows: installation/windows.md
+    - macOS: installation/macos.md
+    - Docker: installation/docker.md
+  - Quick Start: quickstart.md
+  - Commands:
+    - Spoofing: commands/spoofing.md
+    - Scanning: commands/scanning.md
+    - Flood Attacks: commands/flood.md
+    - Phishing: commands/phishing.md
+  - Bot Integrations:
+    - Discord: bots/discord.md
+    - Telegram: bots/telegram.md
+    - Slack: bots/slack.md
+    - WhatsApp: bots/whatsapp.md
+    - iMessage: bots/imessage.md
+    - Webhooks: bots/webhooks.md
+  - API Reference: api.md
+  - Configuration: configuration.md
+  - FAQ: faq.md
+  - Contributing: contributing.md
+  - License: license.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.details
+  - pymdownx.emoji
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+  - mkdocstrings
+  - git-revision-date-localized
+
+extra:
+  social:
+    - icon: fontawesome/brands/gitlab
+      link: https://gitlab.com/your-repo/lets-spoof-port-53
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/r/your-repo/lets-spoof-port-53

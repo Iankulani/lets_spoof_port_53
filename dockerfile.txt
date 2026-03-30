@@ -1,0 +1,91 @@
+# Dockerfile
+FROM python:3.9-slim-bullseye AS builder
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    make \
+    libpcap-dev \
+    libffi-dev \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+RUN pip install --user --no-cache-dir -r requirements.txt
+
+# Final stage
+FROM python:3.9-slim-bullseye
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    # Network tools
+    nmap \
+    hping3 \
+    traceroute \
+    dnsutils \
+    whois \
+    net-tools \
+    iproute2 \
+    arp-scan \
+    ettercap-text-only \
+    dsniff \
+    # System tools
+    sudo \
+    procps \
+    curl \
+    wget \
+    vim \
+    # Python requirements
+    libpcap-dev \
+    libffi-dev \
+    libssl-dev \
+    # Chromium for WhatsApp bot
+    chromium \
+    chromium-driver \
+    # Graphics
+    libfreetype6-dev \
+    libpng-dev \
+    # Cleanup
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN useradd -m -s /bin/bash spoof53 && \
+    echo "spoof53 ALL=(ALL) NOPASSWD: /usr/sbin/arp" >> /etc/sudoers && \
+    echo "spoof53 ALL=(ALL) NOPASSWD: /usr/sbin/iptables" >> /etc/sudoers
+
+# Copy Python packages from builder
+COPY --from=builder /root/.local /home/spoof53/.local
+
+# Set environment variables
+ENV PATH=/home/spoof53/.local/bin:$PATH \
+    PYTHONUNBUFFERED=1 \
+    HOME=/home/spoof53 \
+    DISPLAY=:99
+
+# Create application directory
+WORKDIR /app
+
+# Copy application files
+COPY --chown=spoof53:spoof53 . .
+
+# Create necessary directories
+RUN mkdir -p .lets-spoof-port-53 reports && \
+    chown -R spoof53:spoof53 .lets-spoof-port-53 reports
+
+# Install application
+RUN pip install --no-deps -e .
+
+# Switch to non-root user
+USER spoof53
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python3 -c "import sys; sys.exit(0)"
+
+# Default command
+ENTRYPOINT ["python3", "lets_spoof_port_53.py"]
+
+# Default arguments (can be overridden)
+CMD ["--help"]
