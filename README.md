@@ -7,7 +7,8 @@ git clone https://github.com/Iankulani/lets_spoof_port_53.git
 cd lets_spoof_port_53.
 ```
 
-    # How to run
-    ```bash
-    python lets_spoof_port_53.py
-    ```
+# How to run
+   
+```bash
+python lets_spoof_port_53.py
+```
