@@ -43,3 +43,6 @@ cd lets_spoof_port_53.
 ```bash
 python lets_spoof_port_53.py
 ```
+# Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Iankulani/lets_spoof_port_53&type=Date)](https://star-history.com/#Iankulani/lets_spoof_port_53&Date)
